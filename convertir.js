@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 
 (async () => {
-  console.log("📱 Iniciando modo móvil...");
+  console.log("✂️ Iniciando conversión con corte exacto v2...");
   
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -12,31 +12,39 @@ const path = require('path');
   // 1. Cargar la página
   await page.goto(`file:${filePath}`, { waitUntil: 'networkidle0' });
 
-  // 2. CONFIGURACIÓN MÓVIL
-  // Usamos 375px (iPhone) para forzar tu diseño en una sola columna
+  // 2. Configuración de Móvil (iPhone Width)
   const mobileWidth = 375; 
-  
-  await page.setViewport({ 
-      width: mobileWidth, 
-      height: 800, 
-      isMobile: true, 
-      hasTouch: true 
+  await page.setViewport({ width: mobileWidth, height: 800, isMobile: true });
+
+  // 3. INYECCIÓN DE CSS DE SEGURIDAD
+  // Esto asegura que el body no tenga márgenes raros antes de medir
+  await page.addStyleTag({content: `
+      body, html { margin: 0 !important; padding: 0 !important; min-height: 0 !important; height: auto !important; }
+      .site-footer { margin-bottom: 0 !important; }
+  `});
+
+  // 4. MEDICIÓN DEL BORDE INFERIOR DEL FOOTER
+  const exactHeight = await page.evaluate(() => {
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+          // Obtenemos la coordenada Y donde termina visualmente el footer
+          return footer.getBoundingClientRect().bottom + window.scrollY;
+      }
+      return document.body.scrollHeight;
   });
 
-  // 3. Medir la altura de la página en modo móvil (será mucho más larga)
-  const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
-  console.log(`📏 Altura móvil detectada: ${bodyHeight}px`);
+  console.log(`📏 Altura final calculada: ${exactHeight}px`);
 
-  // 4. Generar el PDF vertical
+  // 5. Generar PDF con esa altura exacta
   await page.pdf({
     path: 'Catalogo_Curativa_Movil.pdf',
-    width: mobileWidth + 'px',   // Ancho de celular
-    height: bodyHeight + 'px',   // Largo infinito
+    width: mobileWidth + 'px',
+    height: Math.floor(exactHeight) + 'px', // Redondeamos hacia abajo
     printBackground: true,
     margin: { top: 0, right: 0, bottom: 0, left: 0 },
     pageRanges: '1'
   });
 
   await browser.close();
-  console.log("✅ ¡PDF Móvil generado! Revisa 'Catalogo_Curativa_Movil.pdf'");
+  console.log("✅ ¡Listo! PDF Generado perfectamente.");
 })();
