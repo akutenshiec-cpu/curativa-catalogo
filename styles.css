@@ -72,7 +72,6 @@ h1, h2, h3 {
   margin-bottom: 3rem;
 }
 
-/* MARCA DE AGUA SVG - ELIMINADA del CSS */
 .hero::before {
     content: '';
     position: absolute;
@@ -92,27 +91,26 @@ h1, h2, h3 {
     z-index: 2; 
     opacity: 0; 
     color: #ffffff; 
-    text-align: center; /* Centrar todo el contenido */
+    text-align: center; 
 }
 
 /* LOGO SVG ENCIMA DEL TEXTO */
 .hero-logo-top {
     display: block; 
-    margin: 0 auto 1.5rem auto; /* Centrar y añadir margen inferior */
-    height: 250px; /* TAMAÑO AJUSTADO: AUMENTADO AL DOBLE (50px * 2) */
+    margin: 0 auto 1.5rem auto; 
+    height: 250px; 
     width: auto;
     object-fit: contain;
-    filter: brightness(0) invert(1); /* Asumimos SVG negro, lo hacemos blanco */
+    filter: brightness(0) invert(1); 
 }
 
-/* TÍTULO H1: KERNING ALTO */
+/* TÍTULO H1 */
 .hero-title {
   font-size: clamp(3rem, 4.5vw, 4rem);
   color: #ffffff; 
   margin: 0 auto 0.4rem; 
-  text-align: center;
-  /* CLAVE: KERNING EXTREMO */
-  letter-spacing: 1.5rem; 
+  text-align: left;
+  letter-spacing: 2.0rem; 
 }
 
 .hero-tagline {
@@ -133,8 +131,8 @@ h1, h2, h3 {
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem; /* AUMENTADO PARA MAYOR SEPARACIÓN */
-    justify-content: center; /* Centrar los botones */
+    gap: 1.5rem; 
+    justify-content: center; 
 }
 
 /* Botones */
@@ -224,8 +222,7 @@ h1, h2, h3 {
     margin: 0;
 }
 
-
-/* SECCIÓN PRODUCTOS DESTACADOS y CARD BASE */
+/* CARD BASE */
 .cards-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -233,7 +230,6 @@ h1, h2, h3 {
   margin-top: 1.5rem;
 }
 
-/* ESTILO CURATIVA CARD (IMAGEN PROTAGONISTA CON ZOOM/FOCO) */
 .card-curativa {
     background: #ffffff;
     border-radius: var(--radius-md);
@@ -266,7 +262,6 @@ h1, h2, h3 {
     background-color: #f8f8f8; 
 }
 .card-curativa .card-thumb img {
-    /* CLAVE: ZOOM/FOCO (cubre el área, recortando si es necesario) */
     width: 100%; 
     height: 100%; 
     object-fit: cover; 
@@ -316,7 +311,7 @@ h1, h2, h3 {
     background: #55418b;
 }
 
-/* --- NUEVA SECCIÓN ROLL-ON --- */
+/* SECCIÓN ROLL-ON */
 .section-roll-on {
     padding: 3.5rem 2.4rem;
     background: var(--color-bg-light); 
@@ -412,7 +407,7 @@ h1, h2, h3 {
     background: #55418b;
 }
 
-/* --- SECCIÓN BÁLSAMOS --- */
+/* SECCIÓN BÁLSAMOS */
 .section-balsamos {
     padding: 3.5rem 2.4rem;
     background: #fdfdfd; 
@@ -493,17 +488,17 @@ h1, h2, h3 {
 }
 
 
-/* SECCIÓN COMPRA Y PAGO: APLICACIÓN DE COLORES NUEVOS */
+/* SECCIÓN COMPRA Y PAGO */
 .section-pago {
-    background: #C1A4CE; /* LILA HEX #C1A4CE */
-    color: var(--color-text-dark); /* Texto principal oscuro (por el fondo claro) */
+    background: #C1A4CE; 
+    color: var(--color-text-dark); 
     border: none;
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius-lg);
 }
 
 .section-pago h2 {
-    color: var(--color-text-dark); /* Título de la sección oscuro */
+    color: var(--color-text-dark); 
 }
 
 .pasos-compra-grid {
@@ -514,27 +509,27 @@ h1, h2, h3 {
 }
 
 .paso-card {
-    background: var(--color-accent-curativa-secondary); /* MORADO OSCURO #6F57A5 */
+    background: var(--color-accent-curativa-secondary); 
     padding: 1.5rem;
     border-radius: var(--radius-md);
-    border-top: 4px solid var(--color-accent-curativa-primary); /* Borde dorado */
+    border-top: 4px solid var(--color-accent-curativa-primary); 
     text-align: center;
-    color: #ffffff; /* Texto de la tarjeta blanco */
+    color: #ffffff; 
 }
 
 .paso-card h3 {
-    color: var(--color-accent-curativa-primary); /* Títulos de paso dorados */
+    color: var(--color-accent-curativa-primary); 
     font-family: var(--font-body);
     font-weight: 700;
 }
 
 .paso-card p {
-    color: #ffffff; /* Texto blanco para buena legibilidad sobre morado */
+    color: #ffffff; 
 }
 
 .bank-details-card {
-    background: #ffffff; /* Las cuentas bancarias se mantienen en blanco para claridad */
-    color: var(--color-text-dark); /* Color base de la tarjeta bancaria */
+    background: #ffffff; 
+    color: var(--color-text-dark); 
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 8px;
@@ -542,20 +537,19 @@ h1, h2, h3 {
     font-size: 0.9rem;
 }
 
-/* CORRECCIÓN DE LEGIBILIDAD: Forzar texto oscuro dentro de las tarjetas bancarias */
 .bank-details-card p {
-    color: var(--color-text-dark); /* Asegura texto oscuro sobre fondo blanco */
+    color: var(--color-text-dark); 
 }
 
 .bank-details-card strong {
-    color: var(--color-accent-curativa-secondary); /* Nombres de banco en morado */
+    color: var(--color-accent-curativa-secondary); 
     display: block;
     margin-bottom: 0.3rem;
     font-size: 1rem;
 }
 
 .promo-box {
-    background: var(--color-bg-dark); /* Morado más oscuro para el bloque promocional */
+    background: var(--color-bg-dark); 
     padding: 1rem;
     border-radius: 8px;
     margin-top: 1rem;
@@ -566,7 +560,7 @@ h1, h2, h3 {
 .site-footer {
   padding: 1.6rem 1.5rem 2rem;
   color: #d1d5db;
-  background: #8662a2; /* Color HEX SOLICITADO */
+  background: #8662a2; 
 }
 
 .footer-inner {
@@ -581,7 +575,6 @@ h1, h2, h3 {
   gap: 10px;
 }
 
-/* LOGO SVG EN EL FOOTER */
 .footer-svg-logo {
     width: 80px; 
     height: 80px;
@@ -593,7 +586,6 @@ h1, h2, h3 {
     color: #ffffff;
 }
 
-
 /* Animación fade-in */
 .anim-fade-in {
   opacity: 1;
@@ -601,11 +593,10 @@ h1, h2, h3 {
   transition: opacity 0.8s ease-out, transform 0.6s ease-out;
 }
 
-/* MEDIA QUERIES */
+/* MEDIA QUERIES (Móvil) */
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2.5rem;
-        /* Kerning ajustado para móvil */
         letter-spacing: 1rem; 
     }
     .hero-title-svg {
@@ -626,7 +617,6 @@ h1, h2, h3 {
     .card-curativa {
         min-height: auto;
     }
-    /* Móvil: La sección de bálsamos se convierte en una sola columna */
     .balsamos-grid {
         grid-template-columns: 1fr;
         min-height: auto;
@@ -637,5 +627,46 @@ h1, h2, h3 {
     }
     .roll-on-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* --- BLOQUE MÁGICO PARA PDF DE UNA SOLA HOJA --- */
+@media print {
+    /* 1. Configuración de página: SIN tamaño fijo para que el script de Node.js decida el largo */
+    @page {
+        margin: 0;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background: white;
+    }
+
+    /* 2. FORZAR VISIBILIDAD INMEDIATA (Elimina animaciones para que no salga texto oculto) */
+    .hero-content, 
+    .anim-fade-in {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+
+    /* 3. Estilos de Links Limpios (pero funcionales) */
+    a {
+        text-decoration: none !important;
+    }
+
+    /* 4. Asegurar que el layout ocupe todo el ancho */
+    .grid {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* 5. Evitar cortes extraños dentro de los elementos (por seguridad) */
+    .section, .card-curativa {
+        break-inside: avoid;
     }
 }
