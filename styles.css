@@ -72,7 +72,7 @@ h1, h2, h3 {
   margin-bottom: 3rem;
 }
 
-/* MARCA DE AGUA SVG - ELIMINADA y REEMPLAZADA por el logo inline */
+/* MARCA DE AGUA SVG - ELIMINADA del CSS */
 .hero::before {
     content: '';
     position: absolute;
@@ -80,7 +80,6 @@ h1, h2, h3 {
     left: 0;
     width: 100%;
     height: 100%;
-    /* RUTA ELIMINADA */
     background: none; 
     opacity: 0; 
     pointer-events: none;
@@ -93,27 +92,27 @@ h1, h2, h3 {
     z-index: 2; 
     opacity: 0; 
     color: #ffffff; 
+    text-align: center; /* Centrar todo el contenido */
 }
 
-/* TÍTULO H1: USANDO FLEXBOX PARA ALINEAR EL LOGO INLINE */
+/* LOGO SVG ENCIMA DEL TEXTO */
+.hero-logo-top {
+    display: block; 
+    margin: 0 auto 1.5rem auto; /* Centrar y añadir margen inferior */
+    height: 250px; /* TAMAÑO AJUSTADO: AUMENTADO AL DOBLE (50px * 2) */
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* Asumimos SVG negro, lo hacemos blanco */
+}
+
+/* TÍTULO H1: KERNING ALTO */
 .hero-title {
   font-size: clamp(3rem, 4.5vw, 4rem);
   color: #ffffff; 
-  margin: 0 0 0.4rem;
-  display: flex; /* Habilita la alineación del texto y la imagen */
-  align-items: center; /* Centra verticalmente el texto y la imagen */
-  gap: 0.5rem; /* Espacio entre el texto "CURATIVA" y el logo */
-}
-
-/* ESTILO DEL LOGO SVG INLINE */
-.hero-title-svg {
-    height: 3em; /* CLAVE: Ajusta la altura del SVG a la altura del texto padre */
-    width: auto;
-    object-fit: contain;
-    /* Ajuste de color si el SVG es oscuro, para que se vea blanco sobre el fondo */
-    filter: brightness(0) invert(1); 
-    /* Alineación fina */
-    transform: translateY(-0.05em); 
+  margin: 0 auto 0.4rem; 
+  text-align: center;
+  /* CLAVE: KERNING EXTREMO */
+  letter-spacing: 1.5rem; 
 }
 
 .hero-tagline {
@@ -135,6 +134,7 @@ h1, h2, h3 {
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem; /* AUMENTADO PARA MAYOR SEPARACIÓN */
+    justify-content: center; /* Centrar los botones */
 }
 
 /* Botones */
@@ -423,8 +423,7 @@ h1, h2, h3 {
     display: grid;
     grid-template-columns: minmax(300px, 1fr) 2fr; 
     gap: 2rem;
-    align-items: stretch; 
-    min-height: 400px; 
+    align-items: start; 
 }
 
 /* Columna Izquierda: Propiedades */
@@ -494,49 +493,69 @@ h1, h2, h3 {
 }
 
 
-/* SECCIÓN COMPRA Y PAGO */
+/* SECCIÓN COMPRA Y PAGO: APLICACIÓN DE COLORES NUEVOS */
 .section-pago {
-    background: var(--color-bg-dark);
-    color: #ffffff;
+    background: #C1A4CE; /* LILA HEX #C1A4CE */
+    color: var(--color-text-dark); /* Texto principal oscuro (por el fondo claro) */
     border: none;
     box-shadow: var(--shadow-soft);
     border-radius: var(--radius-lg);
 }
+
+.section-pago h2 {
+    color: var(--color-text-dark); /* Título de la sección oscuro */
+}
+
 .pasos-compra-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
+
 .paso-card {
-    background: var(--color-bg-darker);
+    background: var(--color-accent-curativa-secondary); /* MORADO OSCURO #6F57A5 */
     padding: 1.5rem;
     border-radius: var(--radius-md);
-    border-top: 4px solid var(--color-accent-curativa-primary);
+    border-top: 4px solid var(--color-accent-curativa-primary); /* Borde dorado */
     text-align: center;
+    color: #ffffff; /* Texto de la tarjeta blanco */
 }
+
 .paso-card h3 {
-    color: var(--color-accent-curativa-primary);
+    color: var(--color-accent-curativa-primary); /* Títulos de paso dorados */
     font-family: var(--font-body);
     font-weight: 700;
 }
+
+.paso-card p {
+    color: #ffffff; /* Texto blanco para buena legibilidad sobre morado */
+}
+
 .bank-details-card {
-    background: #ffffff;
-    color: var(--color-text-dark);
+    background: #ffffff; /* Las cuentas bancarias se mantienen en blanco para claridad */
+    color: var(--color-text-dark); /* Color base de la tarjeta bancaria */
     padding: 1rem;
     margin-top: 1rem;
     border-radius: 8px;
     text-align: left;
     font-size: 0.9rem;
 }
+
+/* CORRECCIÓN DE LEGIBILIDAD: Forzar texto oscuro dentro de las tarjetas bancarias */
+.bank-details-card p {
+    color: var(--color-text-dark); /* Asegura texto oscuro sobre fondo blanco */
+}
+
 .bank-details-card strong {
-    color: var(--color-accent-curativa-secondary);
+    color: var(--color-accent-curativa-secondary); /* Nombres de banco en morado */
     display: block;
     margin-bottom: 0.3rem;
     font-size: 1rem;
 }
+
 .promo-box {
-    background: var(--color-accent-curativa-secondary);
+    background: var(--color-bg-dark); /* Morado más oscuro para el bloque promocional */
     padding: 1rem;
     border-radius: 8px;
     margin-top: 1rem;
@@ -586,7 +605,13 @@ h1, h2, h3 {
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2.5rem;
+        /* Kerning ajustado para móvil */
+        letter-spacing: 1rem; 
     }
+    .hero-title-svg {
+        transform: translateY(-0.05em); 
+    }
+    
     .grid {
         padding: 1rem 1rem 2rem;
     }
@@ -601,18 +626,11 @@ h1, h2, h3 {
     .card-curativa {
         min-height: auto;
     }
-    
-    /* MÓVIL: COMPORTAMIENTO SVG DE HERO - ELIMINADO EN ESTA VERSIÓN */
-    .hero::before {
-        z-index: 1; /* Mantiene el z-index de escritorio (detrás del texto) */
-        background-size: 40% no-repeat; 
-        opacity: 0.08; 
-    }
-    
     /* Móvil: La sección de bálsamos se convierte en una sola columna */
     .balsamos-grid {
         grid-template-columns: 1fr;
         min-height: auto;
+        align-items: start; 
     }
     .balsamos-gallery {
         height: 180px; 
