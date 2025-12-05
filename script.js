@@ -1,77 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const headerNav = document.getElementById('header-nav');
-    const dropdownTrigger = document.querySelector('.dropdown-trigger');
-    const dropdownItem = document.querySelector('.nav-item-dropdown');
+    // --- MENÚ FLOTANTE MÓVIL ---
+    const floatingMenuBtn = document.getElementById('floating-menu');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    
+    if (floatingMenuBtn && mobileNavOverlay) {
+        floatingMenuBtn.addEventListener('click', () => {
+            mobileNavOverlay.classList.toggle('active');
+            mobileNavOverlay.classList.toggle('hidden');
+        });
+    }
+    
+    if (closeMobileMenuBtn) {
+        closeMobileMenuBtn.addEventListener('click', () => {
+            mobileNavOverlay.classList.remove('active');
+            mobileNavOverlay.classList.add('hidden');
+        });
+    }
 
-    if (hamburgerBtn && headerNav) {
-        hamburgerBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            headerNav.classList.toggle('active');
-            const icon = hamburgerBtn.querySelector('i');
-            if (headerNav.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
+    const mobileDropdownTriggers = document.querySelectorAll('.mobile-dropdown .dropdown-trigger');
+    mobileDropdownTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const menu = trigger.nextElementSibling;
+            menu.classList.toggle('active');
+            menu.classList.toggle('hidden');
+            
+            const icon = trigger.querySelector('i');
+            if (menu.classList.contains('active')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
             } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
             }
         });
-    }
+    });
 
-    if (dropdownTrigger && dropdownItem) {
-        dropdownTrigger.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                e.stopPropagation();
-                dropdownItem.classList.toggle('active');
-                const icon = dropdownTrigger.querySelector('i');
-                if(icon) {
-                    if(dropdownItem.classList.contains('active')){
-                        icon.classList.remove('fa-chevron-right');
-                        icon.classList.add('fa-chevron-left');
-                    } else {
-                        icon.classList.remove('fa-chevron-left');
-                        icon.classList.add('fa-chevron-right');
-                    }
-                }
-            }
-        });
-    }
-
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768 && headerNav.classList.contains('active')) {
-            if (!headerNav.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-                headerNav.classList.remove('active');
-                if(dropdownItem) dropdownItem.classList.remove('active');
-                hamburgerBtn.querySelector('i').classList.remove('fa-times');
-                hamburgerBtn.querySelector('i').classList.add('fa-bars');
-            }
+    mobileLinks.forEach(link => {
+        if (!link.classList.contains('dropdown-trigger')) {
+            link.addEventListener('click', () => {
+                mobileNavOverlay.classList.remove('active');
+                mobileNavOverlay.classList.add('hidden');
+            });
         }
     });
 
-    window.addEventListener('scroll', () => {
-        if (window.innerWidth <= 768 && headerNav.classList.contains('active')) {
-            headerNav.classList.remove('active');
-            if(dropdownItem) dropdownItem.classList.remove('active');
-            hamburgerBtn.querySelector('i').classList.remove('fa-times');
-            hamburgerBtn.querySelector('i').classList.add('fa-bars');
-        }
-    });
-
-    document.querySelectorAll('.nav-link:not(.dropdown-trigger), .dropdown-menu a').forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768 && headerNav) {
-                headerNav.classList.remove('active');
-                if(hamburgerBtn) {
-                    const icon = hamburgerBtn.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
-        });
-    });
-
+    // --- HERO CARRUSEL ---
     const slides = document.querySelectorAll('.hero-slide');
     const dots = document.querySelectorAll('.dot');
     const prevHeroBtn = document.querySelector('.hero-arrow.prev');
@@ -79,61 +55,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.querySelector('.progress-fill');
     let currentSlide = 0;
     let slideInterval;
-    const slideDuration = 5000; 
+    const slideDuration = 5000;
+
+    function showSlide(index) {
+        if(!slides.length) return;
+        if (index >= slides.length) currentSlide = 0;
+        else if (index < 0) currentSlide = slides.length - 1;
+        else currentSlide = index;
+
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        slides[currentSlide].classList.add('active');
+        if(dots[currentSlide]) dots[currentSlide].classList.add('active');
+
+        if (progressBar) {
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+            setTimeout(() => {
+                progressBar.style.transition = `width ${slideDuration}ms linear`;
+                progressBar.style.width = '100%';
+            }, 50);
+        }
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    function resetTimer() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, slideDuration);
+    }
 
     if (slides.length > 0) {
-        function showSlide(index) {
-            if (index >= slides.length) currentSlide = 0;
-            else if (index < 0) currentSlide = slides.length - 1;
-            else currentSlide = index;
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            slides[currentSlide].classList.add('active');
-            if(dots[currentSlide]) dots[currentSlide].classList.add('active');
-            if(progressBar) {
-                progressBar.style.width = '0%';
-                setTimeout(() => {
-                    progressBar.style.width = '100%';
-                    progressBar.style.transition = `width ${slideDuration}ms linear`;
-                }, 50);
-            }
-        }
-        function nextSlide() { showSlide(currentSlide + 1); }
-        function prevSlide() { showSlide(currentSlide - 1); }
-        function resetTimer() {
-            clearInterval(slideInterval);
-            if(progressBar) {
-                progressBar.style.transition = 'none';
-                progressBar.style.width = '0%';
-            }
-            slideInterval = setInterval(nextSlide, slideDuration);
-            if(progressBar) {
-                setTimeout(() => {
-                    progressBar.style.transition = `width ${slideDuration}ms linear`;
-                    progressBar.style.width = '100%';
-                }, 50);
-            }
-        }
         showSlide(0);
         resetTimer();
         if(nextHeroBtn) nextHeroBtn.addEventListener('click', () => { nextSlide(); resetTimer(); });
         if(prevHeroBtn) prevHeroBtn.addEventListener('click', () => { prevSlide(); resetTimer(); });
-        dots.forEach(dot => {
-            dot.addEventListener('click', (e) => {
-                const index = parseInt(e.target.dataset.slide);
-                showSlide(index);
-                resetTimer();
-            });
-        });
     }
 
+    // --- SCROLL PRODUCTOS ---
     document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
         const track = wrapper.querySelector('.carousel-track');
         const prevBtn = wrapper.querySelector('.prev-btn');
         const nextBtn = wrapper.querySelector('.next-btn');
         if (track && prevBtn && nextBtn) {
-            nextBtn.addEventListener('click', () => { track.scrollBy({ left: 220, behavior: 'smooth' }); });
-            prevBtn.addEventListener('click', () => { track.scrollBy({ left: -220, behavior: 'smooth' }); });
+            nextBtn.addEventListener('click', () => { track.scrollBy({ left: 250, behavior: 'smooth' }); });
+            prevBtn.addEventListener('click', () => { track.scrollBy({ left: -250, behavior: 'smooth' }); });
         }
     });
 
@@ -175,7 +143,7 @@ window.addFromHero = function(id) {
     const productCard = document.querySelector(`.product-item[data-id="${id}"]`);
     if(productCard) {
         updateProductQty(productCard, 1);
-        alert('¡Agregado al carrito!');
+        alert('¡Producto agregado!');
     }
 };
 
@@ -235,39 +203,38 @@ function updateCartUI() {
     cart.forEach(item => { totalQty += item.qty; totalPrice += (item.price * item.qty); });
     if(cartCountEl) cartCountEl.textContent = totalQty;
     if(cartTotalPreview) cartTotalPreview.textContent = `$${totalPrice.toFixed(2)}`;
-    if (totalQty > 0) {
-        if(floatingCart) floatingCart.classList.remove('hidden');
-    } else { 
-        if(floatingCart) floatingCart.classList.add('hidden'); 
-        if(cartModal) cartModal.classList.add('hidden'); 
-    }
+    // SIEMPRE MOSTRAR CARRITO
+    if(floatingCart) floatingCart.classList.remove('hidden');
     renderModalList(totalPrice);
 }
 
 function renderModalList(totalPrice) {
     if(!cartItemsList) return;
     cartItemsList.innerHTML = '';
-    if (cart.length === 0) { cartItemsList.innerHTML = '<p class="empty-msg">Tu carrito está vacío.</p>'; return; }
-    cart.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'cart-item-row';
-        div.innerHTML = `
-            <div class="item-info">
-                <span class="item-name">${item.name}</span>
-                <span class="item-price">$${item.price.toFixed(2)} c/u</span>
-                <div class="modal-qty-controls">
-                    <button onclick="changeModalQty('${item.id}', -1)" class="modal-qty-btn"><i class="fas fa-minus"></i></button>
-                    <span>${item.qty}</span>
-                    <button onclick="changeModalQty('${item.id}', 1)" class="modal-qty-btn"><i class="fas fa-plus"></i></button>
+    if (cart.length === 0) { 
+        cartItemsList.innerHTML = '<p class="empty-msg">Tu carrito está vacío.</p>'; 
+    } else {
+        cart.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'cart-item-row';
+            div.innerHTML = `
+                <div class="item-info">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-price">$${item.price.toFixed(2)} c/u</span>
+                    <div class="modal-qty-controls">
+                        <button onclick="changeModalQty('${item.id}', -1)" class="modal-qty-btn"><i class="fas fa-minus"></i></button>
+                        <span>${item.qty}</span>
+                        <button onclick="changeModalQty('${item.id}', 1)" class="modal-qty-btn"><i class="fas fa-plus"></i></button>
+                    </div>
                 </div>
-            </div>
-            <div class="item-right">
-                <span class="item-price">$${(item.qty * item.price).toFixed(2)}</span>
-                <button onclick="removeAllItem('${item.id}')" class="remove-btn"><i class="fas fa-trash-alt"></i></button>
-            </div>
-        `;
-        cartItemsList.appendChild(div);
-    });
+                <div class="item-right">
+                    <span class="item-price">$${(item.qty * item.price).toFixed(2)}</span>
+                    <button onclick="removeAllItem('${item.id}')" class="remove-btn"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+            cartItemsList.appendChild(div);
+        });
+    }
     if(finalTotalEl) finalTotalEl.textContent = `$${totalPrice.toFixed(2)}`;
 }
 
@@ -279,7 +246,7 @@ if(continueBtn) continueBtn.addEventListener('click', () => cartModal.classList.
 
 const clearBtn = document.getElementById('clear-cart-btn');
 if(clearBtn) clearBtn.addEventListener('click', () => {
-    if(confirm('¿Estás seguro de vaciar el carrito?')) {
+    if(confirm('¿Vaciar carrito?')) {
         cart = [];
         document.querySelectorAll('.qty-display').forEach(span => span.textContent = '0');
         updateCartUI();
@@ -291,43 +258,26 @@ if(checkoutBtn) checkoutBtn.addEventListener('click', () => {
     if (cart.length === 0) return;
     const nameInput = document.getElementById('customer-name');
     const provinceSelect = document.getElementById('customer-province');
-    
     const customerName = nameInput ? nameInput.value.trim() : "";
     const province = provinceSelect ? provinceSelect.value : "";
 
-    if (!customerName) {
-        alert("Por favor, escribe tu nombre.");
-        if(nameInput) { nameInput.focus(); nameInput.style.borderColor = "#FBAA26"; }
-        return;
-    }
-    
-    if (!province) {
-        alert("Por favor, selecciona tu provincia.");
-        if(provinceSelect) { provinceSelect.focus(); provinceSelect.style.borderColor = "#FBAA26"; }
-        return;
-    }
+    if (!customerName) { alert("Escribe tu nombre."); if(nameInput) nameInput.focus(); return; }
+    if (!province) { alert("Selecciona provincia."); if(provinceSelect) provinceSelect.focus(); return; }
 
-    let message = `Hola Curativa, soy ${customerName} desde ${province}. Este es mi pedido:\n\n`;
+    let message = `Hola Curativa, soy ${customerName} desde ${province}. Pedido:\n\n`;
     let subtotalCart = 0;
-
     cart.forEach(item => {
-        const itemTotal = item.qty * item.price;
-        message += `▪ ${item.qty} x ${item.name} ($${itemTotal.toFixed(2)})\n`;
-        subtotalCart += itemTotal;
+        const total = item.qty * item.price;
+        message += `▪ ${item.qty} x ${item.name} ($${total.toFixed(2)})\n`;
+        subtotalCart += total;
     });
 
-    let shippingCost = 0;
-    if (province !== "Loja") {
-        shippingCost = 5.50;
-        message += `\n📦 Envío Servientrega: $${shippingCost.toFixed(2)}`;
-    } else {
-        message += `\n📦 Entrega Local (Loja)`;
-    }
+    let shipping = (province !== "Loja") ? 5.50 : 0;
+    if(shipping > 0) message += `\n📦 Envío: $${shipping.toFixed(2)}`;
+    else message += `\n📦 Entrega Local`;
 
-    let finalTotal = subtotalCart + shippingCost;
-
-    message += `\n\n*TOTAL A PAGAR: $${finalTotal.toFixed(2)}*`;
-    message += `\n\n(Adjunto mi comprobante de pago para el envío).`;
+    message += `\n\n*TOTAL: $${(subtotalCart + shipping).toFixed(2)}*`;
+    message += `\n\n(Adjunto comprobante).`;
 
     window.open(`https://wa.me/593999913839?text=${encodeURIComponent(message)}`, '_blank');
 });
